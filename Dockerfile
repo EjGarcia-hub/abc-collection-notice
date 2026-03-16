@@ -1,5 +1,6 @@
 FROM php:8.2-apache
 
+# Install PostgreSQL PDO driver + SSL certs
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     ca-certificates \
@@ -7,6 +8,7 @@ RUN apt-get update && apt-get install -y \
  && a2enmod rewrite \
  && rm -rf /var/lib/apt/lists/*
 
+# Allow .htaccess and use index.php by default
 RUN printf '%s\n' \
     '<Directory /var/www/html>' \
     '    AllowOverride All' \
@@ -16,7 +18,10 @@ RUN printf '%s\n' \
     > /etc/apache2/conf-available/app.conf \
  && a2enconf app
 
+# Copy app
 COPY . /var/www/html/
+
+# Permissions
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
