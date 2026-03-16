@@ -1,16 +1,17 @@
 <?php
-$host = "aws-1-ap-northeast-1.pooler.supabase.com";  // copy exact from Supabase (Session/Transaction pooler)
-$port = 6543;                                  // session pooler often uses 5432; transaction pooler often 6543
-$db   = "postgres";
-$user = "postgres.mhsojrnkdopdonqghian";              // IMPORTANT: postgres.<project_ref>
-$pass = "qKUWa5dX12zJjTKy";
+$host = getenv('DB_HOST');
+$port = getenv('DB_PORT') ?: '6543';
+$db   = getenv('DB_NAME') ?: 'postgres';
+$user = getenv('DB_USER');
+$pass = getenv('DB_PASS');
 
-$dsn = "pgsql:host=$host;port=$port;dbname=$db;sslmode=require";
+$dsn = "pgsql:host={$host};port={$port};dbname={$db};sslmode=require";
 
 try {
     $pdo = new PDO($dsn, $user, $pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
 } catch (PDOException $e) {
-    die("DB connection failed: " . $e->getMessage());
+    die("Database connection failed: " . $e->getMessage());
 }
