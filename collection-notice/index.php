@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="container" style="max-width:420px;">
     <div class="card shadow" id="loginCard">
       <div class="text-center pt-4">
-        <img src="assets/img/bank_logo.jpg" alt="logo" style="height:64px;">
+        <img src="<?= h(url('assets/img/bank_logo.jpg')) ?>" alt="logo" style="height:64px;">
         <div class="mt-3">
           <span class="title-pill">Collection Notice</span>
         </div>
