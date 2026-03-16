@@ -2,6 +2,13 @@ Options -Indexes
 DirectoryIndex index.php index.html index.htm
 RewriteEngine On
 
+# Redirect direct .php requests to clean URLs
+# /dashboard.php -> /dashboard
+# keep index.php stable
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.php(\s|\?) [NC]
+RewriteCond %1 !^index$ [NC]
+RewriteRule ^ %1 [R=301,L]
+
 # Serve real files normally
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^ - [L]
@@ -10,10 +17,3 @@ RewriteRule ^ - [L]
 # /dashboard -> /dashboard.php
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+?)/?$ $1.php [L,QSA]
-
-# Redirect direct .php requests to clean URLs
-# /dashboard.php -> /dashboard
-# Skip index.php to keep login/root stable
-RewriteCond %{THE_REQUEST} \s/+(.+?)\.php(\s|\?) [NC]
-RewriteCond %1 !^index$ [NC]
-RewriteRule ^ %1 [R=301,L]
