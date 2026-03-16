@@ -8,16 +8,10 @@ require_login();
 $user = $_SESSION['user'] ?? [];
 $APP_BASE = base_url();
 
-/**
- * Branch code expected: "CAUAYAN" or "SANTIAGO"
- */
 $branch = strtoupper(trim($user['branch_code'] ?? 'CAUAYAN'));
 if (strpos($branch, 'SANTIAGO') !== false) $branch = 'SANTIAGO';
 if (strpos($branch, 'CAUAYAN') !== false)  $branch = 'CAUAYAN';
 
-/* =========================================
-   DEFAULTS (fallback if DB row is missing)
-   ========================================= */
 if ($branch === 'SANTIAGO') {
   $branch_name = "SANTIAGO BRANCH";
   $branch_addr = "NATIONAL ROAD, PLARIDEL,<br>SANTIAGO CITY, ISABELA";
@@ -32,9 +26,6 @@ if ($branch === 'SANTIAGO') {
   $sign_pos    = "BRANCH LOANS HEAD";
 }
 
-/* =========================================
-   FETCH BRANCH SETTINGS FROM DB (branches)
-   ========================================= */
 try {
   $stmt = $pdo->prepare("
     SELECT branch_name, header_address, signature_path, signatory_name, signatory_position
@@ -427,7 +418,7 @@ textarea.form-control { min-height: 90px; }
 
           <div class="d-flex justify-content-between align-items-start">
             <div class="text-left pr-1">
-              <img src="assets/img/bank_logo.jpg" class="bank-logo" alt="Bank Logo">
+              <img src="<?= h(url('assets/img/bank_logo.jpg')) ?>" class="bank-logo" alt="Bank Logo">
             </div>
             <div class="text-right bank-header">
               <strong>AGRIBUSINESS BANKING CORPORATION – A RURAL BANK</strong><br>
@@ -806,7 +797,7 @@ function updateAll(){
 
   const sig = document.getElementById("p_signature");
   if(BRANCH_SIGNATURE){
-    sig.src = BRANCH_SIGNATURE;
+    sig.src = APP_BASE + "/" + BRANCH_SIGNATURE.replace(/^\/+/, "");
     sig.classList.remove("d-none");
   } else {
     sig.classList.add("d-none");
