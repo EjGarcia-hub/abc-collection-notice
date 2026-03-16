@@ -1,0 +1,11 @@
+Options -Indexes
+DirectoryIndex index.php index.html index.htm
+RewriteEngine On
+
+# Serve real files normally
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Optional clean URLs: /dashboard -> /dashboard.php
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+?)/?$ $1.php [L,QSA]
