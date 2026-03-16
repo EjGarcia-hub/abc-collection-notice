@@ -9,4 +9,4 @@ $_SESSION = [];
 session_unset();
 session_destroy();
 
-redirect("index.php"); // -> /collection-notice/index.php
+redirect("index.php");
