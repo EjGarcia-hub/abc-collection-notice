@@ -13,7 +13,7 @@ if (basename($requestPath) === 'index.php') {
 }
 
 if (is_logged_in()) {
-  redirect("dashboard");
+  redirect("dashboard.php");
 }
 
 $error = "";
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'branch_code' => (string)$user['branch_code'],
       ];
 
-      redirect("dashboard");
+      redirect("dashboard.php");
     }
   }
 }
