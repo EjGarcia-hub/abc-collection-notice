@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'branch_code' => (string)$user['branch_code'],
       ];
 
-      redirect("dashboard");
+      redirect("dashboard.php");
     }
   }
 }
