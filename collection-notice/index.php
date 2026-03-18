@@ -5,7 +5,7 @@ require __DIR__ . "/config/auth.php";
 require_once __DIR__ . "/config/app.php";
 
 if (is_logged_in()) {
-  redirect("dashboard.php");
+  redirect("dashboard");
 }
 
 $error = "";
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'branch_code' => (string)$user['branch_code'],
       ];
 
-      redirect("dashboard.php");
+      redirect("dashboard");
     }
   }
 }
@@ -206,8 +206,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
-  const APP_BASE = <?= json_encode($APP_BASE) ?>;
-
   const pw = document.getElementById("pw");
   const togglePw = document.getElementById("togglePw");
   const eyeOpen = document.getElementById("eyeOpen");
