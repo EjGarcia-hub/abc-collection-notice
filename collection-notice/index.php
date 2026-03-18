@@ -13,7 +13,7 @@ if (basename($requestPath) === 'index.php') {
 }
 
 if (is_logged_in()) {
-  redirect("dashboard");
+  redirect("dashboard.php");
 }
 
 $error = "";
