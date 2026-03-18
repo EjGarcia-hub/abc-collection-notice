@@ -13,19 +13,25 @@ define('APP_BASE', $isLocal ? '/collection-notice' : '');
 
 if (!function_exists('base_url')) {
     function base_url(): string {
-        return APP_BASE;
+        return rtrim(APP_BASE, '/');
     }
 }
 
 if (!function_exists('url')) {
     function url(string $path = ''): string {
+        $base = base_url();
         $path = ltrim($path, '/');
-        return rtrim(APP_BASE, '/') . ($path !== '' ? '/' . $path : '/');
+
+        if ($path === '') {
+            return $base === '' ? '/' : $base . '/';
+        }
+
+        return ($base === '' ? '' : $base) . '/' . $path;
     }
 }
 
 if (!function_exists('redirect')) {
-    function redirect(string $path): void {
+    function redirect(string $path = ''): void {
         header('Location: ' . url($path));
         exit;
     }
