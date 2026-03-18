@@ -14,7 +14,7 @@ if (!function_exists('is_logged_in')) {
 if (!function_exists('require_login')) {
     function require_login(): void {
         if (!is_logged_in()) {
-            redirect();
+            redirect("index.php");
         }
     }
 }
