@@ -4,12 +4,19 @@ require __DIR__ . "/config/db.php";
 require __DIR__ . "/config/auth.php";
 require_once __DIR__ . "/config/app.php";
 
+/**
+ * Force /index.php -> /
+ */
+$requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? '';
+if (basename($requestPath) === 'index.php') {
+  redirect();
+}
+
 if (is_logged_in()) {
   redirect("dashboard");
 }
 
 $error = "";
-$APP_BASE = base_url();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = trim($_POST['username'] ?? "");
@@ -221,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     togglePw.classList.toggle("active", visible);
   });
 
-  document.getElementById("loginForm").addEventListener("submit", ()=>{
+  document.getElementById("loginForm").addEventListener("submit", () => {
     const card = document.getElementById("loginCard");
     const spinnerWrap = document.getElementById("spinnerWrap");
     spinnerWrap.style.display = "flex";
