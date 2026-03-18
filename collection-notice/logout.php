@@ -9,5 +9,4 @@ $_SESSION = [];
 session_unset();
 session_destroy();
 
-header("Location: " . rtrim(base_url(), '/') . "/");
-exit;
+redirect("index.php");
