@@ -2,9 +2,12 @@ Options -Indexes
 DirectoryIndex index.php index.html index.htm
 RewriteEngine On
 
-# Redirect direct .php requests to clean URLs
+# Redirect /index.php -> /
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.php(\s|\?) [NC]
+RewriteRule ^index\.php$ ./ [R=301,L]
+
+# Redirect other direct .php requests to clean URLs
 # /dashboard.php -> /dashboard
-# keep index.php stable
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.php(\s|\?) [NC]
 RewriteCond %1 !^index$ [NC]
 RewriteRule ^ %1 [R=301,L]
