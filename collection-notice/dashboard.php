@@ -21,13 +21,13 @@ if (strpos($branch, 'CAUAYAN') !== false)  $branch = 'CAUAYAN';
 if ($branch === 'SANTIAGO') {
   $branch_name = "SANTIAGO BRANCH";
   $branch_addr = "NATIONAL ROAD, PLARIDEL,<br>SANTIAGO CITY, ISABELA";
-  $branch_sig  = "";
+  $branch_sig  = "assets/signatures/santiago.png";
   $sign_name   = "PAULINO VEA CAUILAN";
   $sign_pos    = "BRANCH MANAGER";
 } else {
   $branch_name = "CAUAYAN BRANCH";
   $branch_addr = "LCU BLDG. NATIONAL HIGHWAY, CABARUAN, DISTRICT 2,<br>CAUAYAN CITY, ISABELA 3305";
-  $branch_sig  = "";
+  $branch_sig  = "assets/signatures/cauayan.png";
   $sign_name   = "JOSE ESMUNDO GALAPON";
   $sign_pos    = "BRANCH MANAGER";
 }
@@ -184,7 +184,10 @@ label{
   margin-bottom:18px;
   font-size:18px;
 }
-.preview-date{ margin-bottom:20px; }
+.preview-date{
+  margin-bottom:20px;
+  text-align:right;
+}
 .preview-client-name{
   font-weight:700;
   text-transform:uppercase;
@@ -195,6 +198,16 @@ label{
   text-align:justify;
   margin-bottom:14px;
   text-indent:45px;
+}
+.sign-block{
+  margin-top:24px;
+  text-align:right;
+}
+.sig-img{
+  max-height:80px;
+  display:block;
+  margin-left:auto;
+  margin-bottom:4px;
 }
 .note-line{
   margin-top:32px;
@@ -286,7 +299,6 @@ label{
   <?php endif; ?>
 
   <div class="row">
-    <!-- LEFT PANEL -->
     <div class="col-md-4">
       <div class="card shadow">
         <div class="card-body">
@@ -296,6 +308,8 @@ label{
             <input type="hidden" name="sign_position" id="signPositionField" value="<?= e($sign_pos) ?>">
             <input type="hidden" name="branch_name" id="branchNameField" value="<?= e($branch_name) ?>">
             <input type="hidden" name="branch_address" id="branchAddressField" value="<?= e(strip_tags(str_replace('<br>', ', ', $branch_addr))) ?>">
+            <input type="hidden" name="notice_date" id="noticeDateInput" value="<?= date('Y-m-d') ?>">
+            <input type="hidden" name="pn_no" id="pnNo">
 
             <div class="d-flex justify-content-between align-items-center mb-1">
               <label class="mb-0">Search Borrower</label>
@@ -313,15 +327,8 @@ label{
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label>Account No.</label>
-                <input class="form-control req" name="account_no" id="accountNo" oninput="updateAll()">
+                <input class="form-control req" name="account_no" id="accountNo" oninput="syncAccountToPn(); updateAll();">
               </div>
-              <div class="form-group col-md-6">
-                <label>Promissory Note No.</label>
-                <input class="form-control req" name="pn_no" id="pnNo" oninput="updateAll()">
-              </div>
-            </div>
-
-            <div class="form-row">
               <div class="form-group col-md-6">
                 <label>Loan Type</label>
                 <select class="form-control req" name="loan_type" id="loanType" onchange="updateAll()">
@@ -333,21 +340,16 @@ label{
                   <option value="Business Loan">Business Loan</option>
                 </select>
               </div>
+            </div>
+
+            <div class="form-row">
               <div class="form-group col-md-6">
                 <label>Notice No.</label>
                 <select class="form-control req" name="notice_no" id="noticeNo" onchange="updateAll()">
                   <option value="">-- Select --</option>
                   <option value="FIRST">FIRST NOTICE</option>
                   <option value="SECOND">SECOND NOTICE</option>
-                  <option value="THIRD">THIRD NOTICE</option>
                 </select>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label>Notice Date</label>
-                <input type="date" class="form-control req" name="notice_date" id="noticeDateInput" value="<?= date('Y-m-d') ?>" onchange="updateAll()">
               </div>
               <div class="form-group col-md-6">
                 <label>Past Due Since</label>
@@ -420,7 +422,6 @@ label{
       </div>
     </div>
 
-    <!-- RIGHT PANEL -->
     <div class="col-md-8">
       <div class="card shadow mb-3">
         <div class="card-body notice-box" id="printArea">
@@ -450,13 +451,12 @@ label{
 
             <div class="preview-body" id="p_body"></div>
 
-            <br><br>
-
-            <p>Very truly yours,</p>
-            <br><br>
-
-            <p style="font-weight:700; margin-bottom:0;" id="p_signName"><?= e($sign_name) ?></p>
-            <p style="margin-top:0;" id="p_signPosition"><?= e($sign_pos) ?></p>
+            <div class="sign-block">
+              <p style="margin-bottom:22px;">Very truly yours,</p>
+              <img id="p_signature" class="sig-img d-none" alt="Signature">
+              <p style="font-weight:700; margin-bottom:0;" id="p_signName"><?= e($sign_name) ?></p>
+              <p style="margin-top:0;" id="p_signPosition"><?= e($sign_pos) ?></p>
+            </div>
 
             <div class="note-line">
               <strong>NOTE: Please disregard this notice if full payment has already been made.</strong>
@@ -494,8 +494,6 @@ function clearStuckBackdrops(){
   document.body.classList.remove("modal-open");
   document.body.style.removeProperty("padding-right");
 }
-
-function ensureA4Wrapper(){ return; }
 
 function fitPreviewToA4(){
   if(!A4_READY) return;
@@ -560,30 +558,25 @@ function fmtMoney(n){
   const v = Number(cleaned) || 0;
   return v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
+function syncAccountToPn(){
+  pnNo.value = accountNo.value || "";
+}
 function bodyTextByNotice(){
-  const pn = normalizeSpaces(pnNo.value || accountNo.value);
+  const acct = normalizeSpaces(accountNo.value);
   const loanAmt = fmtMoney(loanAmount.value);
   const dueDate = formatPrettyDate(pastDueSince.value);
   const notice = normalizeSpaces(noticeNo.value).toUpperCase();
 
   if (notice === 'SECOND') {
     return `
-      <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Promissory Note No. <strong>${pn}</strong> amounting to PHP <strong>${loanAmt}</strong>, excluding penalties and interests which has been left unpaid since <strong>${dueDate}</strong> despite our initial notice and follow-ups.</p>
+      <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Account No. <strong>${acct}</strong> amounting to PHP <strong>${loanAmt}</strong>, excluding penalties and interests which has been left unpaid since <strong>${dueDate}</strong> despite our initial notice and follow-ups.</p>
       <p>We are enjoining you for the second time, to please come and settle your obligation to the Bank to avoid further accumulation of interest and penalties that may arise on your account due to continued payment failure.</p>
       <p>We will appreciate your prompt settlement of your obligation.</p>
     `;
   }
 
-  if (notice === 'THIRD') {
-    return `
-      <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Promissory Note No. <strong>${pn}</strong> amounting to PHP <strong>${loanAmt}</strong>, excluding penalties and interests which has been left unpaid since <strong>${dueDate}</strong> despite our previous notices and follow-ups.</p>
-      <p>We are enjoining you for the third time, to please come and settle your obligation to the Bank to avoid further accumulation of interest and penalties that may arise on your account due to continued payment failure.</p>
-      <p>We will appreciate your prompt settlement of your obligation.</p>
-    `;
-  }
-
   return `
-    <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Promissory Note No. <strong>${pn}</strong> with an outstanding balance amounting to PHP <strong>${loanAmt}</strong>, excluding interests and penalties.</p>
+    <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Account No. <strong>${acct}</strong> with an outstanding balance amounting to PHP <strong>${loanAmt}</strong>, excluding interests and penalties.</p>
     <p>Please be reminded that your account has turned past due and has been left unpaid since <strong>${dueDate}</strong>.</p>
     <p>We urge you to please come and settle your obligation to the Bank, to avoid further accumulation of interests and penalties that may arise due to failure of non-payment of the loan account.</p>
     <p>We will appreciate your prompt settlement of your obligation.</p>
@@ -630,6 +623,8 @@ function setSalutation(btn){
 }
 
 function updateAll(){
+  syncAccountToPn();
+
   const fn = normalizeSpaces(firstName.value);
   const mn = normalizeSpaces(middleName.value);
   const ln = normalizeSpaces(lastName.value);
@@ -653,6 +648,15 @@ function updateAll(){
   p_signPosition.innerText = signPositionField.value || "BRANCH MANAGER";
   p_branchName.innerText = branchNameField.value || "BRANCH";
   p_branchAddress.innerHTML = (branchAddressField.value || "").replace(/\n/g, "<br>");
+
+  const sig = document.getElementById("p_signature");
+  if (BRANCH_SIGNATURE) {
+    sig.src = APP_BASE + "/" + BRANCH_SIGNATURE.replace(/^\/+/, "");
+    sig.classList.remove("d-none");
+  } else {
+    sig.classList.add("d-none");
+    sig.removeAttribute("src");
+  }
 
   fitPreviewToA4();
 }
@@ -711,6 +715,15 @@ document.getElementById("btnPrintAction").addEventListener("click", async ()=>{
     try { await document.fonts.ready; } catch(e){}
   }
 
+  const sig = document.getElementById("p_signature");
+  if (sig && sig.src) {
+    await new Promise(resolve => {
+      if (sig.complete) return resolve();
+      sig.addEventListener("load", resolve, { once:true });
+      sig.addEventListener("error", resolve, { once:true });
+    });
+  }
+
   window.print();
 });
 
@@ -738,6 +751,15 @@ document.getElementById("btnPdfAction").addEventListener("click", async ()=>{
 
   if (document.fonts && document.fonts.ready) {
     try { await document.fonts.ready; } catch(e){}
+  }
+
+  const sig = document.getElementById("p_signature");
+  if (sig && sig.src) {
+    await new Promise(resolve => {
+      if (sig.complete) return resolve();
+      sig.addEventListener("load", resolve, { once:true });
+      sig.addEventListener("error", resolve, { once:true });
+    });
   }
 
   const area = document.getElementById("printArea");
@@ -783,7 +805,7 @@ function renderDropdown(q){
   }
   searchDropdown.innerHTML = ddItems.map((it, idx)=>{
     const title = `${it.full_name || ""}`.trim() || "(No Name)";
-    const sub = `Acct: ${it.account_no || "-"} • PN: ${it.pn_no || "-"} • Loan: ${it.loan_type || "-"}`;
+    const sub = `Acct: ${it.account_no || "-"} • Loan: ${it.loan_type || "-"}`;
     return `
       <div class="item ${idx===ddActiveIndex?'active':''}" data-idx="${idx}">
         <div><strong>${highlight(title, q)}</strong></div>
@@ -806,7 +828,7 @@ function selectDropdownItem(idx){
   if(!it) return;
 
   accountNo.value    = it.account_no || "";
-  pnNo.value         = it.pn_no || "";
+  pnNo.value         = it.account_no || "";
   loanType.value     = it.loan_type || "";
   firstName.value    = it.first_name || "";
   middleName.value   = it.middle_name || "";
