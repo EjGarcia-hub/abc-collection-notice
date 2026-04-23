@@ -137,14 +137,6 @@ label{
   font-weight:800;
   padding:10px 14px;
 }
-.btn-preview{
-  border:none;
-  color:#fff;
-  border-radius:14px;
-  font-weight:900;
-  padding:10px 14px;
-  background:linear-gradient(135deg, #5e72e4, #11cdef);
-}
 .btn-print2{
   border:none;
   color:#fff;
@@ -400,14 +392,6 @@ label{
                 <i class="bi bi-arrow-counterclockwise mr-2"></i> Clear
               </button>
 
-              <button type="button" class="btn btn-preview flex-fill" onclick="updateAll()">
-                Preview
-              </button>
-            </div>
-
-            <hr>
-
-            <div class="d-flex" style="gap:10px;">
               <button type="button" class="btn btn-print2 flex-fill" id="btnPrintAction">
                 <i class="bi bi-printer mr-2"></i> Print
               </button>
