@@ -317,11 +317,11 @@ label{
             </div>
 
             <div class="form-row">
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <label>Account No.</label>
                 <input class="form-control req" name="account_no" id="accountNo" oninput="syncAccountToPn(); updateAll();">
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <label>Loan Type</label>
                 <select class="form-control req" name="loan_type" id="loanType" onchange="updateAll()">
                   <option value="">-- Select --</option>
@@ -331,6 +331,10 @@ label{
                   <option value="Personal Loan">Personal Loan</option>
                   <option value="Business Loan">Business Loan</option>
                 </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Principal Balance</label>
+                <input class="form-control req" name="loan_amount" id="loanAmount" placeholder="0.00" oninput="updateAll()">
               </div>
             </div>
 
@@ -347,11 +351,6 @@ label{
                 <label>Past Due Since</label>
                 <input type="date" class="form-control req" name="past_due_since" id="pastDueSince" onchange="updateAll()">
               </div>
-            </div>
-
-            <div class="form-group">
-              <label>Loan Amount</label>
-              <input class="form-control req" name="loan_amount" id="loanAmount" placeholder="0.00" oninput="updateAll()">
             </div>
 
             <label>Salutation</label>
@@ -525,7 +524,6 @@ async function waitForImagesIn(el){
 function nextFrame(){ return new Promise(r => requestAnimationFrame(()=>r())); }
 
 function normalizeSpaces(s){ return String(s || "").replace(/\s+/g," ").trim(); }
-function toTitleCase(str){ return String(str || "").toLowerCase().replace(/\b([a-z])/g, m => m.toUpperCase()); }
 function titleCaseNamePart(str){
   const s = normalizeSpaces(str).toLowerCase();
   if(!s) return "";
@@ -553,14 +551,14 @@ function bodyTextByNotice(){
 
   if (notice === 'SECOND') {
     return `
-      <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Account No. <strong>${acct}</strong> amounting to PHP <strong>${loanAmt}</strong>, excluding penalties and interests which has been left unpaid since <strong>${dueDate}</strong> despite our initial notice and follow-ups.</p>
+      <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Account No. <strong>${acct}</strong> with a principal balance of PHP <strong>${loanAmt}</strong>, excluding penalties and interests which has been left unpaid since <strong>${dueDate}</strong> despite our initial notice and follow-ups.</p>
       <p>We are enjoining you for the second time, to please come and settle your obligation to the Bank to avoid further accumulation of interest and penalties that may arise on your account due to continued payment failure.</p>
       <p>We will appreciate your prompt settlement of your obligation.</p>
     `;
   }
 
   return `
-    <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Account No. <strong>${acct}</strong> with an outstanding balance amounting to PHP <strong>${loanAmt}</strong>, excluding interests and penalties.</p>
+    <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Account No. <strong>${acct}</strong> with a principal balance of PHP <strong>${loanAmt}</strong>, excluding interests and penalties.</p>
     <p>Please be reminded that your account has turned past due and has been left unpaid since <strong>${dueDate}</strong>.</p>
     <p>We urge you to please come and settle your obligation to the Bank, to avoid further accumulation of interests and penalties that may arise due to failure of non-payment of the loan account.</p>
     <p>We will appreciate your prompt settlement of your obligation.</p>
