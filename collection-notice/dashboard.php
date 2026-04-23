@@ -419,7 +419,7 @@ label{
                 <strong id="p_branchAddress"><?= $branch_addr ?></strong>
               </div>
             </div>
-<hr>
+<hr-strong>
             <div class="preview-title" id="p_noticeTitle"></div>
 
             <div class="preview-date" id="p_noticeDate"></div>
