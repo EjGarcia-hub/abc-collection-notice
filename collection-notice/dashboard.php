@@ -419,7 +419,7 @@ label{
                 <strong id="p_branchAddress"><?= $branch_addr ?></strong>
               </div>
             </div>
-
+<hr>
             <div class="preview-title" id="p_noticeTitle"></div>
 
             <div class="preview-date" id="p_noticeDate"></div>
@@ -433,14 +433,16 @@ label{
             <p id="p_greeting"></p>
 
             <div class="preview-body" id="p_body"></div>
-
+<br>
+<br>
             <div class="sign-block">
               <p style="margin-bottom:22px;">Very truly yours,</p>
               <img id="p_signature" class="sig-img d-none" alt="Signature">
               <p style="font-weight:700; margin-bottom:0;" id="p_signName"><?= e($sign_name) ?></p>
               <p style="margin-top:0;" id="p_signPosition"><?= e($sign_pos) ?></p>
             </div>
-
+<br>
+<br>
             <div class="note-line">
               <strong>NOTE: Please disregard this notice if full payment has already been made.</strong>
             </div>
@@ -553,7 +555,7 @@ function bodyTextByNotice(){
     return `
       <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Promisory Note No. <strong>${acct}</strong> amounting to PHP <strong>${loanAmt}</strong>, excluding penalties and interests which has been left unpaid since <strong>${dueDate}</strong> despite our initial notice and follow-ups.</p>
       <br>
-      <p>We are enjoining you for the <strong>second time,<strong> to please come and settle your obligation to the Bank to avoid further accumulation of interest and penalties that may arise on your account due to continued payment failure.</p>
+      <p>We are enjoining you for the <strong>second time,</strong> to please come and settle your obligation to the Bank to avoid further accumulation of interest and penalties that may arise on your account due to continued payment failure.</p>
       <br>
       <p>We will appreciate your prompt settlement of your obligation.</p>
     `;
