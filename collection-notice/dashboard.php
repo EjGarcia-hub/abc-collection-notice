@@ -560,7 +560,7 @@ function bodyTextByNotice(){
   }
 
   return `
-    <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Promisory Note No. <strong>${acct}</strong> <i>with an outstanding balance amounting<i> to PHP <strong>${loanAmt}</strong>, excluding <i>interests and penalties.<i></p>
+    <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Promisory Note No. <strong>${acct}</strong> <i>with an outstanding balance amounting</i> to PHP <strong>${loanAmt}</strong>, excluding <i>interests and penalties.</i></p>
     <br>
     <p>Please be reminded that your account has turned past due and has been left unpaid since <strong>${dueDate}</strong>.</p>
     <br>
