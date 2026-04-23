@@ -420,7 +420,7 @@ label{
               </div>
             </div>
 
-            <div class="preview-title" id="p_noticeTitle">FIRST NOTICE</div>
+            <div class="preview-title" id="p_noticeTitle"></div>
 
             <div class="preview-date" id="p_noticeDate"></div>
 
@@ -551,16 +551,21 @@ function bodyTextByNotice(){
 
   if (notice === 'SECOND') {
     return `
-      <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Account No. <strong>${acct}</strong> with a principal balance of PHP <strong>${loanAmt}</strong>, excluding penalties and interests which has been left unpaid since <strong>${dueDate}</strong> despite our initial notice and follow-ups.</p>
-      <p>We are enjoining you for the second time, to please come and settle your obligation to the Bank to avoid further accumulation of interest and penalties that may arise on your account due to continued payment failure.</p>
+      <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Promisory Note No. <strong>${acct}</strong> amounting to PHP <strong>${loanAmt}</strong>, excluding penalties and interests which has been left unpaid since <strong>${dueDate}</strong> despite our initial notice and follow-ups.</p>
+      <br>
+      <p>We are enjoining you for the <strong>second time,<strong> to please come and settle your obligation to the Bank to avoid further accumulation of interest and penalties that may arise on your account due to continued payment failure.</p>
+      <br>
       <p>We will appreciate your prompt settlement of your obligation.</p>
     `;
   }
 
   return `
-    <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Account No. <strong>${acct}</strong> with a principal balance of PHP <strong>${loanAmt}</strong>, excluding interests and penalties.</p>
+    <p>This refers to your loan account with Agribusiness Banking Corporation - A Rural Bank covered by Promisory Note No. <strong>${acct}</strong> <i>with an outstanding balance amounting<i> to PHP <strong>${loanAmt}</strong>, excluding <i>interests and penalties.<i></p>
+    <br>
     <p>Please be reminded that your account has turned past due and has been left unpaid since <strong>${dueDate}</strong>.</p>
+    <br>
     <p>We urge you to please come and settle your obligation to the Bank, to avoid further accumulation of interests and penalties that may arise due to failure of non-payment of the loan account.</p>
+    <br>
     <p>We will appreciate your prompt settlement of your obligation.</p>
   `;
 }
